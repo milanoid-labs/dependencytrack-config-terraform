@@ -1,5 +1,5 @@
-# The teams DependencyTrack seeds on first start, and their permissions (imported, see
-# imports.tf). DependencyTrack 5 splits most areas into the umbrella permission plus
+# The teams DependencyTrack seeds on first start, and their permissions (adopted with
+# import blocks in #2). DependencyTrack 5 splits most areas into the umbrella permission plus
 # _CREATE/_READ/_UPDATE/_DELETE; the full list is GET /api/v1/permission.
 #
 # Not managed here:
