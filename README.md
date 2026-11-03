@@ -15,7 +15,6 @@ is left alone.
 | File | Manages |
 |---|---|
 | `teams.tf` | The teams DependencyTrack seeds on first start (`Administrators`, `Automation`, `Portfolio Managers`) and their permissions |
-| `imports.tf` | One-time `import` blocks that adopted those teams. Delete the file once applied. |
 | `terraform.tf` | Backend, provider, the DependencyTrack connection variables |
 
 Deliberately unmanaged:
