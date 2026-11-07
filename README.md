@@ -17,6 +17,7 @@ is left alone.
 | `teams.tf` | The teams DependencyTrack seeds on first start (`Administrators`, `Automation`, `Portfolio Managers`) and their permissions |
 | `projects.tf` | Projects (`linkding`). Only the project; SBOM uploads are data and stay out of tofu |
 | `vuln_sources.tf` | Vulnerability data sources beyond the default NVD (OSV) |
+| `settings.tf` | Config properties set on purpose (`base.url`, telemetry off) |
 | `terraform.tf` | Backend, provider, the DependencyTrack connection variables |
 
 Deliberately unmanaged:
