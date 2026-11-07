@@ -11,5 +11,6 @@ resource "dependencytrack_project" "linkding" {
   version     = "1.47.0"
   classifier  = "CONTAINER"
   description = "Bookmark manager, sissbruecker/linkding container image (homelab-cluster)"
-  purl        = "pkg:docker/sissbruecker/linkding@1.47.0"
+  # purl is left out on purpose: each SBOM upload sets it from the BOM's metadata (the
+  # image digest), so managing it here would only fight the upload.
 }
