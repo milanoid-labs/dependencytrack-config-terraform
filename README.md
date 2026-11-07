@@ -1,8 +1,8 @@
 # DependencyTrack configuration (OpenTofu)
 
 OpenTofu configuration for the homelab [DependencyTrack](https://dependencytrack.org/)
-5.2 (`http://dependencytrack.milanoid.net`): teams and their permissions, and later
-projects, policies and settings.
+5.2 (`http://dependencytrack.milanoid.net`): teams and their permissions, projects, and later
+policies and settings.
 
 DependencyTrack itself (the Helm chart, its Postgres role and database, the ingress)
 is deployed by Flux from
@@ -15,6 +15,7 @@ is left alone.
 | File | Manages |
 |---|---|
 | `teams.tf` | The teams DependencyTrack seeds on first start (`Administrators`, `Automation`, `Portfolio Managers`) and their permissions |
+| `projects.tf` | Projects (`linkding`). Only the project; SBOM uploads are data and stay out of tofu |
 | `terraform.tf` | Backend, provider, the DependencyTrack connection variables |
 
 Deliberately unmanaged:
