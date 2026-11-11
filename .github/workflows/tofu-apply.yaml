@@ -16,9 +16,6 @@ jobs:
   apply:
     runs-on: homelab-runners
 
-    env:
-      TF_VAR_dependencytrack_api_key: ${{ secrets.TF_VAR_DEPENDENCYTRACK_API_KEY }}
-
     steps:
       - name: checkout
         id: checkout
@@ -44,10 +41,17 @@ jobs:
         id: tofu-init
         run: tofu init -input=false
 
+      # Only the tofu steps get the API key, not the third-party actions above.
+      # -lock-timeout: wait for a lock held by someone else (e.g. a local plan) instead of
+      # failing the merge-time apply.
       - name: tofu plan
         id: tofu-plan
-        run: tofu plan -input=false -out tfplan
+        env:
+          TF_VAR_dependencytrack_api_key: ${{ secrets.TF_VAR_DEPENDENCYTRACK_API_KEY }}
+        run: tofu plan -input=false -lock-timeout=5m -out tfplan
 
       - name: tofu apply
         id: tofu-apply
-        run: tofu apply -input=false -auto-approve tfplan
+        env:
+          TF_VAR_dependencytrack_api_key: ${{ secrets.TF_VAR_DEPENDENCYTRACK_API_KEY }}
+        run: tofu apply -input=false -lock-timeout=5m -auto-approve tfplan
