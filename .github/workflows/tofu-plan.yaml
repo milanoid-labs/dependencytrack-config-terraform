@@ -19,9 +19,6 @@ jobs:
   plan:
     runs-on: homelab-runners
 
-    env:
-      TF_VAR_dependencytrack_api_key: ${{ secrets.TF_VAR_DEPENDENCYTRACK_API_KEY }}
-
     steps:
       - name: checkout
         id: checkout
@@ -47,11 +44,16 @@ jobs:
         id: tofu-init
         run: tofu init -input=false
 
+      # Only the tofu step gets the API key, not the third-party actions in this job.
+      # -lock=false: a plan never writes state, and holding the S3 lock here would make a
+      # concurrent merge-time apply fail. 2>&1 so errors reach the PR comment.
       - name: tofu plan
         id: tofu-plan
+        env:
+          TF_VAR_dependencytrack_api_key: ${{ secrets.TF_VAR_DEPENDENCYTRACK_API_KEY }}
         run: |
           set -o pipefail
-          tofu plan -input=false -no-color -out tfplan | tee plan.txt
+          tofu plan -input=false -no-color -lock=false -out tfplan 2>&1 | tee plan.txt
 
       - name: comment plan on pr
         id: comment-plan
@@ -66,7 +68,8 @@ jobs:
             let plan = '';
             try {
               plan = fs.readFileSync('plan.txt', 'utf8');
-            } catch {
+            } catch {}
+            if (!plan.trim()) {
               plan = 'No plan output — the plan step failed before producing any. See the job log.';
             }
             const truncated = plan.length > max;
@@ -84,11 +87,14 @@ jobs:
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
 
-            // Update our own previous comment instead of adding one per push.
+            // Update our own previous comment instead of adding one per push. Match on the
+            // author too: this repo is public, so anyone could post a comment with the marker.
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner, repo, issue_number,
             });
-            const existing = comments.find(c => c.body.startsWith(marker));
+            const existing = comments.find(
+              c => c.user?.login === 'github-actions[bot]' && c.body?.startsWith(marker),
+            );
 
             if (existing) {
               await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
