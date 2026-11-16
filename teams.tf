@@ -63,6 +63,8 @@ resource "dependencytrack_team_permissions" "administrators" {
 # For CI pipelines that upload SBOMs (give it an API key to use from a pipeline).
 # PROJECT_CREATION_UPLOAD lets an upload with autoCreate=true create the per-release
 # project (devops-study-app's CI does, under the parent project in projects.tf).
+# PORTFOLIO_MANAGEMENT_UPDATE lets that CI mark the previous versions inactive after an
+# upload (PATCH /api/v1/project/{uuid}), so only the latest release counts in the metrics.
 resource "dependencytrack_team" "automation" {
   name = "Automation"
 }
@@ -71,6 +73,7 @@ resource "dependencytrack_team_permissions" "automation" {
   team = dependencytrack_team.automation.id
   permissions = [
     "BOM_UPLOAD",
+    "PORTFOLIO_MANAGEMENT_UPDATE",
     "PROJECT_CREATION_UPLOAD",
     "VIEW_PORTFOLIO",
   ]
