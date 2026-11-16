@@ -15,7 +15,7 @@ is left alone.
 | File | Manages |
 |---|---|
 | `teams.tf` | The teams DependencyTrack seeds on first start (`Administrators`, `Automation`, `Portfolio Managers`) and their permissions |
-| `projects.tf` | Projects (`linkding`). Only the project; SBOM uploads are data and stay out of tofu |
+| `projects.tf` | Projects (`linkding`, the `devops-study-app` parent). Only the project; SBOM uploads are data and stay out of tofu, and CI creates the per-release projects under the parent |
 | `vuln_sources.tf` | Vulnerability data sources beyond the default NVD (OSV) |
 | `settings.tf` | Config properties set on purpose (`base.url`, telemetry off) |
 | `terraform.tf` | Backend, provider, the DependencyTrack connection variables |

@@ -2,7 +2,7 @@
 #
 # The internal analyzer matches components against the mirrored data. NVD (enabled by
 # default) only matches by CPE, and SBOMs from Trivy carry purls, not CPEs, so NVD alone
-# finds nothing in them. OSV matches by purl, including distro packages (pkg:deb).
+# finds nothing in them. OSV matches by purl, including distro packages (pkg:deb, pkg:apk).
 #
 # Each config replaces the whole extension config, so every field is listed.
 
@@ -19,8 +19,9 @@ resource "dependencytrack_extension_config" "osv" {
     dataUrl                     = "https://storage.googleapis.com/osv-vulnerabilities"
     incrementalMirroringEnabled = true
     aliasSyncEnabled            = true
-    # The defaults plus Debian (the base of the linkding image). Names as in
+    # The defaults plus Debian (the base of the linkding image) and Alpine (the base of the
+    # devops-study-app images). Names as in
     # https://ossf.github.io/osv-schema/#defined-ecosystems.
-    ecosystems = ["Debian", "Go", "Maven", "npm", "NuGet", "PyPI"]
+    ecosystems = ["Alpine", "Debian", "Go", "Maven", "npm", "NuGet", "PyPI"]
   })
 }
